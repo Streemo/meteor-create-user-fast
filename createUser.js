@@ -6,11 +6,6 @@ import bcrypt from "bcrypt";
 
 const bcryptHash = Meteor.wrapAsync(bcrypt.hash);
 
-const passwordValidator = Match.OneOf(
-  String,
-  { digest: String, algorithm: String }
-);
-
 const getPasswordString = function (password) {
   if (typeof password === "string") {
     password = SHA256(password);
@@ -36,7 +31,9 @@ Accounts.createUserFast = function(options){
   check(options, Match.ObjectIncluding({
     username: Match.Optional(String),
     email: Match.Optional(String),
-    password: Match.Optional(passwordValidator)
+    password: Match.Optional(Match.OneOf(
+      String, {digest:String,algorithm:String}
+    ))
   }));
   const username = options.username.toLowerCase();
   const email = options.email.toLowerCase();
@@ -51,10 +48,10 @@ Accounts.createUserFast = function(options){
     user.username = username;
   if (email)
     user.emails = [{address: email, verified: false}];
-  //got rid of all case-ins. hacks.
-  //developer must feed value.toLowerCase() here.
+  //got rid of all case-ins. checks
+  //developer should feed value.toLowerCase() here.
   //An `alias` field can easily be implemented
-  //by the developer if they care about case-ins
+  //by the developer if they care about case-sens
   //(e.g. {username:'somename',alias:"SoMeNaMe"})
   //all uniq./lookups should be done on username.
   return Accounts.insertUserDoc(options, user);
