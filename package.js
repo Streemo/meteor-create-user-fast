@@ -1,6 +1,6 @@
 Package.describe({
   name: 'streemo:create-user-fast',
-  version: '0.0.1',
+  version: '0.0.2',
   // Brief, one-line summary of the package.
   summary: 'Accounts.createUser without the case-insensitive checks.',
   // URL to the Git repository containing the source code for this package.

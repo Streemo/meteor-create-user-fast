@@ -35,8 +35,11 @@ Accounts.createUserFast = function(options){
       String, {digest:String,algorithm:String}
     ))
   }));
-  const username = options.username.toLowerCase();
-  const email = options.email.toLowerCase();
+  let username, email;
+  if (options.username)
+    username = options.username.toLowerCase();
+  if (options.email)
+    email = options.email.toLowerCase();
   if (!username && !email)
     throw new Meteor.Error(400, "Need to set a username or email");
   const user = {services: {}};
